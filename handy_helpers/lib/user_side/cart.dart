@@ -3,6 +3,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:handy_helpers/datemodel.dart' as Date_Utils;
@@ -50,7 +51,7 @@ class _BookState extends State<Cart> {
   List<TimeModel> times = [];
   String? selectedTime = "12 PM";
   String _location = '';
-  bool? service_exists ;
+  bool? service_exists;
 
   checkcart() async {
     // Get the reference to the cart collection for the specific user
@@ -73,17 +74,16 @@ class _BookState extends State<Cart> {
     });
   }
 
- 
   Future<void> checkLogin() async {
     SharedPreferences shared = await SharedPreferences.getInstance();
     setState(() {
       checking = shared.getString("login");
-
     });
   }
+
   Position? _currentLocation;
   String? _currentAddress;
- bool _isLoading = false;
+  bool _isLoading = false;
   Future<void> _checklocationPermissions() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -108,14 +108,12 @@ class _BookState extends State<Cart> {
       _showPermissionDialog();
     } else {
       // Permissions are granted
-     setState(() {
-          _isLoading = true;
-        });
-        await _getCurrentLocation();
+      setState(() {
+        _isLoading = true;
+      });
+      await _getCurrentLocation();
     }
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   Future<void> _showPermissionDialog() async {
@@ -124,7 +122,8 @@ class _BookState extends State<Cart> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Location Permission Denied"),
-          content: Text("Location permissions are permanently denied. Please enable them in settings."),
+          content: Text(
+              "Location permissions are permanently denied. Please enable them in settings."),
           actions: [
             TextButton(
               onPressed: () async {
@@ -147,6 +146,7 @@ class _BookState extends State<Cart> {
       print("Failed to open app settings: '${e.message}'.");
     }
   }
+
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -164,6 +164,7 @@ class _BookState extends State<Cart> {
       print(e.toString());
     }
   }
+
   Future<void> _getAddress() async {
     if (_currentLocation == null) return;
 
@@ -175,16 +176,16 @@ class _BookState extends State<Cart> {
 
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = "${place.street}, ${place.subLocality}, ${place.locality}, ${place.country}";
-         _locationController.text = _currentAddress!;
-          _isLoading = false;
-
-
+        _currentAddress =
+            "${place.street}, ${place.subLocality}, ${place.locality}, ${place.country}";
+        _locationController.text = _currentAddress!;
+        _isLoading = false;
       });
     } catch (e) {
       print(e.toString());
     }
   }
+
   String? userName;
   String? userEmail;
   getuserData() async {
@@ -236,8 +237,9 @@ class _BookState extends State<Cart> {
       String orderId = randomAlphaNumeric(10); // Generates a new ID
       int numberOfServices = cartItems.docs.length;
       String? userId = checking;
-        var orderDate = DateTime.now().day.toString()+"-"+DateTime.now().month.toString()+"-"+DateTime.now().year.toString();
-  var orderTime =DateTime.now().hour.toString()+":"+DateTime.now().minute.toString()+":"+DateTime.now().second.toString();
+      // var orderDate = DateTime.now().day.toString()+"-"+DateTime.now().month.toString()+"-"+DateTime.now().year.toString();
+      // var orderTime =DateTime.now().hour.toString()+":"+DateTime.now().minute.toString()+":"+DateTime.now().second.toString();
+      var order_TIME =DateTime.now().day.toString()+"-"+DateTime.now().month.toString()+"-"+DateTime.now().year.toString()+" "+DateTime.now().hour.toString()+":"+DateTime.now().minute.toString()+":"+DateTime.now().second.toString();
       //  var datetime = DateTime.now().day.toString() +
       //     "-" +
       //     DateTime.now().month.toString() +
@@ -257,8 +259,9 @@ class _BookState extends State<Cart> {
         'address': _location,
         'specialNote': specialNoteController.text,
         'totalAmount': totalamount,
-        'orderTime': orderTime,
-        'orderDATE': orderDate,
+        'order_DateTime': order_TIME,
+        // 'orderTime': orderTime,
+        // 'orderDATE': orderDate,
         'status': "Pending",
         'rating_status': "Pending",
       });
@@ -277,14 +280,14 @@ class _BookState extends State<Cart> {
             .doc(orderId)
             .collection('OrderDetails')
             .add({
-              'orderID':orderId,
+          'orderID': orderId,
           'serviceId': serviceId,
           'service': service,
           'quantity': quantity,
           'price': price,
           'subtotal': subtotal_,
           'category': item['categoryname'],
-          "rating":"Not yet"
+          "rating": "Not yet"
         }).then(
           (value) async {
             await item.reference.delete();
@@ -295,14 +298,13 @@ class _BookState extends State<Cart> {
       print(e.toString());
     }
   }
- @override
+
+  @override
   void initState() {
     super.initState();
-    checkLogin().then(
-      (value) => checkcart().then((value){
-getuserData();
-      })
-    );
+    checkLogin().then((value) => checkcart().then((value) {
+          getuserData();
+        }));
     times = getTimes();
     currentMonthList = Date_Utils.DateUtils.daysInMonth(selectedDateTime);
     // currentMonthList = DateUtils.daysInMonth(selectedDateTime);
@@ -310,7 +312,6 @@ getuserData();
     currentMonthList = currentMonthList.toSet().toList();
     scrollController =
         ScrollController(initialScrollOffset: 60.0 * selectedDateTime.day);
-    
   }
 
   @override
@@ -320,9 +321,8 @@ getuserData();
         title: Text('Cart'),
       ),
       backgroundColor: Colors.blueGrey[100],
-      body: Stack(
-        children:[
-           service_exists == true
+      body: Stack(children: [
+        service_exists == true
             ? SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -338,16 +338,16 @@ getuserData();
                           if (!snapshot.hasData) {
                             return Center(child: CircularProgressIndicator());
                           }
-        
+
                           var cartItems = snapshot.data?.docs;
-        
+
                           if (cartItems == null || cartItems.isEmpty) {
                             return Center(child: Text("Your cart is empty"));
                           }
-        
+
                           // Group cart items by category
-                          Map<String, List<QueryDocumentSnapshot>> groupedItems =
-                              {};
+                          Map<String, List<QueryDocumentSnapshot>>
+                              groupedItems = {};
                           // totalamount = 0;
                           for (var item in cartItems) {
                             String category = item['categoryname'] ?? 'Others';
@@ -357,12 +357,12 @@ getuserData();
                               groupedItems[category] = [item];
                             }
                           }
-        
+
                           return Column(
                             children: groupedItems.entries.map((entry) {
                               String category = entry.key;
                               List<QueryDocumentSnapshot> items = entry.value;
-        
+
                               return Container(
                                 margin: EdgeInsets.symmetric(vertical: 10),
                                 padding: EdgeInsets.all(10),
@@ -421,8 +421,8 @@ getuserData();
                                                     child: Text(
                                                       item['servicename'] ??
                                                           'Service Name',
-                                                      style:
-                                                          TextStyle(fontSize: 15),
+                                                      style: TextStyle(
+                                                          fontSize: 15),
                                                     ),
                                                   ),
                                                   SizedBox(width: 10),
@@ -430,7 +430,8 @@ getuserData();
                                                     "X $quantity",
                                                     style: TextStyle(
                                                       fontSize: 15,
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
                                                   SizedBox(width: 30),
@@ -462,11 +463,13 @@ getuserData();
                                               children: [
                                                 Text(
                                                   "Service Price: PKR ${item['price']}",
-                                                  style: TextStyle(fontSize: 15),
+                                                  style:
+                                                      TextStyle(fontSize: 15),
                                                 ),
                                                 Text(
                                                   "Sub total: PKR ${subtotal.toString()}",
-                                                  style: TextStyle(fontSize: 15),
+                                                  style:
+                                                      TextStyle(fontSize: 15),
                                                 ),
                                                 SizedBox(height: 10),
                                                 Row(
@@ -528,7 +531,7 @@ getuserData();
                             Container(
                               padding: EdgeInsets.symmetric(
                                   vertical: 8.0, horizontal: 15),
-        
+
                               // height: 30,
                               decoration: BoxDecoration(
                                 border: Border(
@@ -549,22 +552,25 @@ getuserData();
                                 controller: scrollController,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (BuildContext context, int index) {
-                                   var today =  DateTime.now();
+                                  var today = DateTime.now();
                                   return Padding(
                                     padding: const EdgeInsets.only(left: 15),
                                     child: GestureDetector(
                                       onTap: () {
                                         setState(() {
-                                          if(currentMonthList[index] .day
-                                                    .toInt() >= today.day.toInt()){
-                                          selectedDateTime =
-                                              currentMonthList[index];
-                                          selectday = Date_Utils
-                                                  .DateUtils.weekdays[
-                                              currentMonthList[index].weekday -
-                                                  1];
-                                        }}
-                                        );
+                                          if (currentMonthList[index]
+                                                  .day
+                                                  .toInt() >=
+                                              today.day.toInt()) {
+                                            selectedDateTime =
+                                                currentMonthList[index];
+                                            selectday =
+                                                Date_Utils.DateUtils.weekdays[
+                                                    currentMonthList[index]
+                                                            .weekday -
+                                                        1];
+                                          }
+                                        });
                                       },
                                       child: Container(
                                         height: 80,
@@ -575,13 +581,17 @@ getuserData();
                                           color: (currentMonthList[index].day ==
                                                   selectedDateTime.day)
                                               ? Colors.indigo
-                                              : (currentMonthList[index] .day
-                                                    .toInt()+1 <= today.day.toInt())?
-                                                Colors.grey  
-                                              : Colors.white,
+                                              : (currentMonthList[index]
+                                                              .day
+                                                              .toInt() +
+                                                          1 <=
+                                                      today.day.toInt())
+                                                  ? Colors.grey
+                                                  : Colors.white,
                                           border:
                                               Border.all(color: Colors.indigo),
-                                          borderRadius: BorderRadius.circular(40),
+                                          borderRadius:
+                                              BorderRadius.circular(40),
                                         ),
                                         child: Center(
                                           child: Column(
@@ -651,15 +661,17 @@ getuserData();
                                         color: selectedTime == times[index].time
                                             ? Colors.indigo
                                             : Colors.white,
-                                        border: Border.all(color: Colors.indigo),
+                                        border:
+                                            Border.all(color: Colors.indigo),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Text(
                                         times[index].time ?? '',
                                         style: TextStyle(
-                                          color: selectedTime == times[index].time
-                                              ? Colors.white
-                                              : Colors.black,
+                                          color:
+                                              selectedTime == times[index].time
+                                                  ? Colors.white
+                                                  : Colors.black,
                                         ),
                                       ),
                                     ),
@@ -693,7 +705,8 @@ getuserData();
                                     decoration: BoxDecoration(
                                         border: Border(
                                             left: BorderSide(
-                                                color: Colors.indigo, width: 5))),
+                                                color: Colors.indigo,
+                                                width: 5))),
                                     child: Text(
                                       "Address",
                                       style: TextStyle(
@@ -703,7 +716,7 @@ getuserData();
                                 SizedBox(
                                   height: 10,
                                 ),
-                                TextField(                                
+                                TextField(
                                   controller: _locationController,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -726,7 +739,7 @@ getuserData();
                                           fontStyle: FontStyle.italic,
                                           color: Colors.grey)),
                                   onTap: () {
-                                     _checklocationPermissions();
+                                    _checklocationPermissions();
                                   },
                                   readOnly: true,
                                 ),
@@ -782,12 +795,13 @@ getuserData();
                                 Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 8.0, horizontal: 15),
-        
+
                                     // height: 30,
                                     decoration: BoxDecoration(
                                         border: Border(
                                             left: BorderSide(
-                                                color: Colors.indigo, width: 5))),
+                                                color: Colors.indigo,
+                                                width: 5))),
                                     child: Text(
                                       "Payment",
                                       style: TextStyle(
@@ -856,36 +870,47 @@ getuserData();
                         ),
                         child: TextButton(
                           onPressed: () async {
-                            if(_locationController.text != null){
-                            completeOrder();
-                            AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.success,
-                              borderSide: const BorderSide(
-                                color: Colors.green,
-                                // width: 2,
-                              ),
-                              // width: 280,
-                              buttonsBorderRadius: const BorderRadius.all(
-                                Radius.circular(2),
-                              ),
-                              dismissOnTouchOutside: false,
-                              dismissOnBackKeyPress: false,
-                              headerAnimationLoop: false,
-                              animType: AnimType.bottomSlide,
-                              title: 'Booked',
-                              desc: 'You have booked service',
-                              showCloseIcon: true,
-                              btnOkText: "Check booking",
-                              btnOkOnPress: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Side(page_index: 1,),
-                                    ));
-                              },
-                              // ok: () {},
-                            ).show();
+                            if (_currentAddress == null) {
+                              completeOrder();
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.success,
+                                borderSide: const BorderSide(
+                                  color: Colors.green,
+                                  // width: 2,
+                                ),
+                                // width: 280,
+                                buttonsBorderRadius: const BorderRadius.all(
+                                  Radius.circular(2),
+                                ),
+                                dismissOnTouchOutside: false,
+                                dismissOnBackKeyPress: false,
+                                headerAnimationLoop: false,
+                                animType: AnimType.bottomSlide,
+                                title: 'Booked',
+                                desc: 'You have booked service',
+                                showCloseIcon: true,
+                                btnOkText: "Check booking",
+                                btnOkOnPress: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Side(
+                                          page_index: 1,
+                                        ),
+                                      ));
+                                },
+                                // ok: () {},
+                              ).show();
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please Enter Your Location",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                             }
                           },
                           child: Text("complete order"),
@@ -918,13 +943,10 @@ getuserData();
                   ],
                 ),
               ),
-          LoadingOverlay(isLoading: _isLoading),
-     
+        LoadingOverlay(isLoading: _isLoading),
       ]),
     );
   }
-  
-
 }
 
 class LoadingOverlay extends StatelessWidget {
@@ -948,4 +970,3 @@ class LoadingOverlay extends StatelessWidget {
     );
   }
 }
-
