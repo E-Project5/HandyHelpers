@@ -68,7 +68,7 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     chek_login().then(
-      (value) =>  wishlishcheck(widget.service_id!),
+      (value) => wishlishcheck(widget.service_id!),
     );
     tabController = TabController(length: 2, vsync: this);
     categoryFuture = getServiceData(widget.service_id!)
@@ -410,13 +410,16 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                                                     Icons.star,
                                                     color: Colors.yellow,
                                                   ),
-                                                  Text(
-                                                    // ${serviceData['rating'] ?? 'N/A'}
-                                                    "",
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .lightBlue[900]),
-                                                  )
+                                                  Column(children: [
+                                                    
+                                                    // Text(
+                                                    //   // ${serviceData['rating'] ?? 'N/A'}
+                                                    //   // "",
+                                                    //   style: TextStyle(
+                                                    //       color: Colors
+                                                    //           .lightBlue[900]),
+                                                    // )
+                                                  ]),
                                                 ],
                                               )
                                             ],
@@ -615,7 +618,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                       // mainAxisAlignment: MainAxisAlignment.,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                         Container(
                           padding: EdgeInsets.fromLTRB(15, 5, 20, 0),
                           height: 30,
@@ -739,7 +744,9 @@ class _DetailState extends State<Detail> with TickerProviderStateMixin {
                             ],
                           ),
                         ),
-                        SizedBox(height: 30,),
+                        SizedBox(
+                          height: 30,
+                        ),
                       ],
                     ),
                   ),

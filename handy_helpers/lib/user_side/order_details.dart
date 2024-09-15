@@ -245,11 +245,38 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("Order Time"),
-                                  Text(" ${Order['orderTime']}")
+                                  Text(" ${Order['order_DateTime']}")
                                 ],
                               ),
                               SizedBox(
                                 height: 10,
+                              ),
+                              DottedLine(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Seleted Time"),
+                                  Text(" ${Order['selectedTime']}")
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              DottedLine(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Seleted Day"),
+                                  Text(" ${Order['date'].toString()+" "+ Order['day']}")
+                                ],
                               ),
                               SizedBox(
                                 height: 10,

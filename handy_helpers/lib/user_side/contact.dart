@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:handy_helpers/services/database_conn.dart';
 import 'package:handy_helpers/start/theme/theme.dart';
 import 'package:handy_helpers/user_side/side.dart';
 import 'package:random_string/random_string.dart';

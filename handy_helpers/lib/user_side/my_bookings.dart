@@ -36,24 +36,24 @@ class _MyBookingsState extends State<MyBookings> {
       OrdersData = await FirebaseFirestore.instance
           .collection('Orders')
           .where("userId", isEqualTo: checking)
-          .where("status", isEqualTo: "Pending")
+          .where("status", isEqualTo: "Pending").orderBy("order_DateTime", descending: true)
           .snapshots();
     } else if (dropdown_Selected == "Completed") {
       OrdersData = await FirebaseFirestore.instance
           .collection('Orders')
           .where("userId", isEqualTo: checking)
-          .where("status", isEqualTo: "Completed")
+          .where("status", isEqualTo: "Completed").orderBy("order_DateTime", descending: true)
           .snapshots();
     } else if (dropdown_Selected == "Cancel") {
       OrdersData = await FirebaseFirestore.instance
           .collection('Orders')
           .where("userId", isEqualTo: checking)
-          .where("status", isEqualTo: "Cancel")
+          .where("status", isEqualTo: "Cancelled").orderBy("order_DateTime", descending: true)
           .snapshots();
     } else {
       OrdersData = FirebaseFirestore.instance
           .collection('Orders')
-          .where("userId", isEqualTo: checking)
+          .where("userId", isEqualTo: checking).orderBy("order_DateTime", descending: true)
           .snapshots();
     }
     setState(() {});
@@ -135,6 +135,7 @@ class _MyBookingsState extends State<MyBookings> {
                   }
 
                   if (snapshot.hasError) {
+                    print(snapshot.error);
                     return Center(child: Text('Error: ${snapshot.error}'));
                   }
                   return snapshot.hasData
@@ -208,7 +209,7 @@ class _MyBookingsState extends State<MyBookings> {
                                                   children: [
                                                     Text("Order Time"),
                                                     Text(
-                                                        " ${order_data['orderTime']}")
+                                                        " ${order_data['order_DateTime']}")
                                                   ],
                                                 ),
                                                 SizedBox(
@@ -286,8 +287,20 @@ class _MyBookingsState extends State<MyBookings> {
                           ),
                         )
                       : Center(
-                          child: CircularProgressIndicator(),
-                        );
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "You haven't order yet!",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    
+                  ],
+                ),
+              );
                 },
               ),
             ],
