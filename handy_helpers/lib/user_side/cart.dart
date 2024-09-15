@@ -870,7 +870,7 @@ class _BookState extends State<Cart> {
                         ),
                         child: TextButton(
                           onPressed: () async {
-                            if (_currentAddress == null) {
+                            if (_currentAddress != null) {
                               completeOrder();
                               AwesomeDialog(
                                 context: context,
