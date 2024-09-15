@@ -22,13 +22,13 @@ class _FaqState extends State<Faq> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("app bar"),
+        title: Text(""),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.black,
         actions: [
-          GFAvatar(
-            backgroundImage: AssetImage("images/pg2.png"),
-          )
+          // GFAvatar(
+          //   backgroundImage: AssetImage("images/pg2.png"),
+          // )
         ],
       ),
       body: Container(
