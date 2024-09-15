@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "248221189596",
+    "project_id": "handyhelpers-5f587",
+    "storage_bucket": "handyhelpers-5f587.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248221189596:android:6ff853b039f1580270bb19",
+        "android_client_info": {
+          "package_name": "com.example.handy_helpers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAasYmWQBIz57Towi89oRRBx-ZQ6YlwmC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248221189596:android:37c13fb7a9b5b43870bb19",
+        "android_client_info": {
+          "package_name": "com.example.usercredentials"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAasYmWQBIz57Towi89oRRBx-ZQ6YlwmC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
