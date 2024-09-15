@@ -19,6 +19,8 @@ class Agreement_page extends StatefulWidget {
   _AgreementState createState() => _AgreementState();
 }
 
+
+
 class _AgreementState extends State<Agreement_page> {
   bool _isAccepted = false;
 
